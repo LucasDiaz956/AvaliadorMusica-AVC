@@ -1,0 +1,3 @@
+Lucas;19;lucas@diaz.com;123456
+lucasdm;19;lucas@diaz.com;lucas
+ikediaz123;99;ike@gmail.com;12345
