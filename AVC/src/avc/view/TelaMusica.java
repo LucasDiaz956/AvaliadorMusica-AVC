@@ -23,7 +23,7 @@ public class TelaMusica extends JFrame {
 	public TelaMusica(TelaInicial pai, Musica musicaParaEditar, int index) {
 		this.telaPai = pai;
 		this.indexEdicao = index;
-		
+
 		setTitle(musicaParaEditar == null ? "Avaliar Música" : "Editar Avaliação");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 589, 442);
