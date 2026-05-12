@@ -27,8 +27,6 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import javax.swing.JPasswordField;
 
-
-
 public class TelaCadastro extends JFrame {
 
 	private static final long serialVersionUID = 1L;
@@ -39,9 +37,6 @@ public class TelaCadastro extends JFrame {
 	private JTextField txtEmail;
 	private JPasswordField txtSenha;
 
-	/**
-	 * Launch the application.
-	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -54,15 +49,11 @@ public class TelaCadastro extends JFrame {
 			}
 			
 		});
-        new TelaCadastro().setVisible(true);
+
 	};
 
-	/**
-	 * Create the frame.
-	 */
 	public TelaCadastro() {
-		setResizable(true);
-		
+		setResizable(false);
 		setBackground(new Color(106, 100, 250));
 		setAutoRequestFocus(false);
 		setBounds(100, 100, 558, 438);
@@ -267,9 +258,7 @@ public class TelaCadastro extends JFrame {
 				            lblIdade.setForeground(Color.RED);
 				            erro = true;
 				        }
-				    
-
-
+			    		
 				    if (erro) return;
 
 				    RepositorioCadastro.salvarDados(nome, idade, email, senha);

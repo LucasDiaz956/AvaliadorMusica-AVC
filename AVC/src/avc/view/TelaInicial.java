@@ -1,5 +1,6 @@
 package avc.view;
 
+//Biblioteca
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -17,6 +18,7 @@ public class TelaInicial extends JFrame {
     private JPanel panelListaCartoes;
     private ArrayList<Musica> listaDeAvaliacoes = new ArrayList<>();
 
+    //
     public static void main(String[] args) {
         EventQueue.invokeLater(() -> {
             try {
@@ -27,42 +29,48 @@ public class TelaInicial extends JFrame {
             }
         });
     }
-
+    
+    //Método Construtor
     public TelaInicial() {
+		setResizable(false);
         setTitle("SoundTrackly - Minha Lista");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 1000, 600);
         setExtendedState(JFrame.MAXIMIZED_BOTH); 
         
+        //Inicialização do Painel
         contentPane = new JPanel();
         contentPane.setBackground(new Color(18, 18, 18));
         contentPane.setLayout(new BorderLayout());
         setContentPane(contentPane);
 
-        // --- HEADER ---
+        //Criação Header
         JPanel panelHeader = new JPanel(new BorderLayout());
         panelHeader.setBackground(new Color(25, 25, 25));
         panelHeader.setPreferredSize(new Dimension(0, 60));
         panelHeader.setBorder(new MatteBorder(0, 0, 2, 0, new Color(106, 100, 250))); 
         
+        //Criação Logo
         JLabel lblLogo = new JLabel("  🎵 SoundTrackly");
         lblLogo.setForeground(Color.WHITE);
         lblLogo.setFont(new Font("SansSerif", Font.BOLD, 22));
         panelHeader.add(lblLogo, BorderLayout.WEST);
         
+        //"Informações do Usuário"
         JLabel lblUser = new JLabel(""); 
         lblUser.setForeground(Color.WHITE);
         lblUser.setFont(new Font("SansSerif", Font.PLAIN, 18));
         panelHeader.add(lblUser, BorderLayout.EAST);
         contentPane.add(panelHeader, BorderLayout.NORTH);
 
-        // --- SIDEBAR ---
+        //Painel Esquerdo
         JPanel panelEsquerdo = new JPanel();
         panelEsquerdo.setBackground(new Color(35, 35, 35));
         panelEsquerdo.setPreferredSize(new Dimension(60, 0));
         panelEsquerdo.setLayout(new BoxLayout(panelEsquerdo, BoxLayout.Y_AXIS));
         String[] icones = {"🏠", "🚪"};
         
+        //Loop para a criação e estilização da lateral
         for (String icone : icones) {
             JLabel lblIcon = new JLabel(icone);
             lblIcon.setForeground(Color.GRAY);
@@ -70,51 +78,48 @@ public class TelaInicial extends JFrame {
             lblIcon.setAlignmentX(Component.CENTER_ALIGNMENT);
             lblIcon.setBorder(new EmptyBorder(15, 0, 15, 0));
             
-            
             lblIcon.setCursor(new Cursor(Cursor.HAND_CURSOR));
             
-            
+            //Verificação Logout
             if (icone.equals("🚪")) {
                 lblIcon.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        // Pergunta de segurança antes de deslogar
                         int confirm = JOptionPane.showConfirmDialog(null, 
                             "Deseja realmente sair da sua conta?", 
                             "Fazer Logout", 
                             JOptionPane.YES_NO_OPTION);
                             
                         if (confirm == JOptionPane.YES_OPTION) {
-                            dispose(); // Fecha a tela inicial
-                            new TelaLogin().setVisible(true); // Abre a tela de login
+                            dispose();
+                            new TelaLogin().setVisible(true);
                         }
                     }
                 });
             }
-            
             panelEsquerdo.add(lblIcon);
         }
+        
         contentPane.add(panelEsquerdo, BorderLayout.WEST);
 
-        // --- ÁREA CENTRAL ---
         JPanel panelCentral = new JPanel(new BorderLayout());
         panelCentral.setBackground(new Color(18, 18, 18));
-        
+
         JPanel panelBotao = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 20));
         panelBotao.setBackground(new Color(18, 18, 18));
         
+        //Botão "Nova Avaliação"
         JButton btnAdicionar = new JButton("+ Nova Avaliação");
         btnAdicionar.setPreferredSize(new Dimension(160, 45));
         btnAdicionar.setForeground(Color.WHITE);
         btnAdicionar.setBackground(new Color(106, 100, 250)); // Cor roxa
         btnAdicionar.setFont(new Font("Arial", Font.BOLD, 14));
         btnAdicionar.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        
-        // Estilo flat
         btnAdicionar.setFocusPainted(false);
         btnAdicionar.setBorderPainted(false);
         btnAdicionar.setOpaque(true); 
         
+        //Lógica de abrir "TelaMusica"
         btnAdicionar.addActionListener(e -> new TelaMusica(this, null, -1).setVisible(true));
         panelBotao.add(btnAdicionar);
         panelCentral.add(panelBotao, BorderLayout.NORTH);
@@ -122,29 +127,33 @@ public class TelaInicial extends JFrame {
         panelListaCartoes = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 20));
         panelListaCartoes.setBackground(new Color(18, 18, 18));
         
+        //Scroll p/ várias avaliações
         JScrollPane scrollPane = new JScrollPane(panelListaCartoes);
         scrollPane.setBorder(null); 
         scrollPane.getVerticalScrollBar().setUnitIncrement(16);
         panelCentral.add(scrollPane, BorderLayout.CENTER);
         contentPane.add(panelCentral, BorderLayout.CENTER);
 
-        // CARREGAR DADOS AO INICIAR
+        //Salvamento dos dados da música cadastrada
         listaDeAvaliacoes = RepositorioMusica.carregarMusicas();
         atualizarInterface();
     }
 
+    //Adicionar nova música na Array
     public void adicionarMusica(Musica m) {
         listaDeAvaliacoes.add(m);
         RepositorioMusica.salvarTodas(listaDeAvaliacoes);
         atualizarInterface();
     }
 
+    //Edição dos dados da música
     public void editarMusica(Musica m, int index) {
         listaDeAvaliacoes.set(index, m);
         RepositorioMusica.salvarTodas(listaDeAvaliacoes);
         atualizarInterface();
     }
 
+    //Exclusão dos dados da música
     public void excluirMusica(int index) {
         int confirm = JOptionPane.showConfirmDialog(null, "Deseja excluir esta música?", "Excluir", JOptionPane.YES_NO_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
@@ -154,6 +163,7 @@ public class TelaInicial extends JFrame {
         }
     }
 
+    //"Limpeza" do painel
     public void atualizarInterface() {
         panelListaCartoes.removeAll();
         
@@ -161,6 +171,7 @@ public class TelaInicial extends JFrame {
             final int index = i;
             Musica m = listaDeAvaliacoes.get(i);
 
+            //Criação do card de música
             JPanel card = new JPanel(new BorderLayout(15, 15));
             card.setPreferredSize(new Dimension(480, 200)); 
             card.setBackground(new Color(30, 30, 30)); 
@@ -168,8 +179,7 @@ public class TelaInicial extends JFrame {
                 new MatteBorder(1, 1, 1, 1, new Color(50, 50, 50)), 
                 new EmptyBorder(15, 15, 15, 15) 
             ));
-
-            // --- 1. CABEÇALHO DO CARTÃO ---
+            
             JPanel panelTop = new JPanel(new BorderLayout(15, 0));
             panelTop.setOpaque(false);
 
@@ -191,8 +201,8 @@ public class TelaInicial extends JFrame {
             JLabel lblArtista = new JLabel(m.getArtista());
             lblArtista.setFont(new Font("Arial", Font.PLAIN, 13));
             lblArtista.setForeground(new Color(160, 160, 160));
-
-            // ESTRELAS
+            
+            //Estrelas
             StringBuilder estrelasHtml = new StringBuilder("<html><font size='+1' color='#F5A623'>");
             for (int j = 0; j < m.getEstrelas(); j++) estrelasHtml.append("&#9733; "); // Estrela cheia
             for (int j = m.getEstrelas(); j < 5; j++) estrelasHtml.append("&#9734; "); // Estrela vazia
@@ -200,20 +210,14 @@ public class TelaInicial extends JFrame {
             
             JLabel lblEstrelas = new JLabel(estrelasHtml.toString());
 
+            //Montagem do card
             panelInfo.add(lblTitulo);
             panelInfo.add(lblArtista);
             panelInfo.add(lblEstrelas);
             panelTop.add(panelInfo, BorderLayout.CENTER);
 
-            JLabel lblData = new JLabel("04/05/2026"); // Apenas estético por enquanto
-            lblData.setFont(new Font("Arial", Font.PLAIN, 11));
-            lblData.setForeground(new Color(120, 120, 120));
-            lblData.setVerticalAlignment(SwingConstants.TOP);
-            panelTop.add(lblData, BorderLayout.EAST);
-
             card.add(panelTop, BorderLayout.NORTH);
 
-            // --- 2. ÁREA DE COMENTÁRIOS ---
             JTextArea txtComentario = new JTextArea(m.getComentario());
             txtComentario.setFont(new Font("Arial", Font.PLAIN, 14));
             txtComentario.setForeground(new Color(220, 220, 220));
@@ -223,14 +227,13 @@ public class TelaInicial extends JFrame {
             txtComentario.setEditable(false);
             card.add(txtComentario, BorderLayout.CENTER);
 
-            // --- 3. BOTÕES DE AÇÃO ---
             JPanel pnlAcoes = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
             pnlAcoes.setOpaque(false);
 
             JButton btnEdit = new JButton("Editar");
             btnEdit.setFont(new Font("Arial", Font.BOLD, 11));
             btnEdit.setForeground(Color.WHITE);
-            btnEdit.setBackground(new Color(70, 70, 70)); // Cinza escuro
+            btnEdit.setBackground(new Color(70, 70, 70));
             btnEdit.setCursor(new Cursor(Cursor.HAND_CURSOR));
             btnEdit.setFocusPainted(false);
             btnEdit.setBorderPainted(false);
@@ -240,7 +243,7 @@ public class TelaInicial extends JFrame {
             JButton btnDel = new JButton("Excluir");
             btnDel.setFont(new Font("Arial", Font.BOLD, 11));
             btnDel.setForeground(Color.WHITE);
-            btnDel.setBackground(new Color(200, 50, 50)); // Vermelho
+            btnDel.setBackground(new Color(200, 50, 50));
             btnDel.setCursor(new Cursor(Cursor.HAND_CURSOR));
             btnDel.setFocusPainted(false);
             btnDel.setBorderPainted(false);
@@ -253,6 +256,7 @@ public class TelaInicial extends JFrame {
 
             panelListaCartoes.add(card);
         }
+        
         panelListaCartoes.revalidate();
         panelListaCartoes.repaint();
     }
