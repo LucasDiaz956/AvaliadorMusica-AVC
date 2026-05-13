@@ -12,7 +12,6 @@ import avc.model.Musica;
 import avc.data.RepositorioMusica;
 
 public class TelaInicial extends JFrame {
-
     private static final long serialVersionUID = 1L;
     private JPanel contentPane;
     private JPanel panelListaCartoes;
@@ -191,21 +190,28 @@ public class TelaInicial extends JFrame {
             lblImagem.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 40));
             panelTop.add(lblImagem, BorderLayout.WEST);
 
-            JPanel panelInfo = new JPanel(new GridLayout(3, 1));
+            JPanel panelInfo = new JPanel(new GridLayout(4, 1));
             panelInfo.setOpaque(false);
-
-            JLabel lblTitulo = new JLabel(m.getNome() + " - " + m.getArtista());
+            
+            //Nome da Música
+            JLabel lblTitulo = new JLabel(m.getNome());
             lblTitulo.setFont(new Font("Arial", Font.BOLD, 18));
             lblTitulo.setForeground(Color.WHITE);
 
+            //Artista
             JLabel lblArtista = new JLabel(m.getArtista());
             lblArtista.setFont(new Font("Arial", Font.PLAIN, 13));
             lblArtista.setForeground(new Color(160, 160, 160));
             
+            //Gênero Musical
+            JLabel lblGenero = new JLabel(m.getGenero());
+            lblGenero.setFont(new Font("Arial", Font.ITALIC, 12));
+            lblGenero.setForeground(new Color(130, 130, 130));
+            
             //Estrelas
             StringBuilder estrelasHtml = new StringBuilder("<html><font size='+1' color='#F5A623'>");
-            for (int j = 0; j < m.getEstrelas(); j++) estrelasHtml.append("&#9733; "); // Estrela cheia
-            for (int j = m.getEstrelas(); j < 5; j++) estrelasHtml.append("&#9734; "); // Estrela vazia
+            for (int j = 0; j < m.getEstrelas(); j++) estrelasHtml.append("&#9733; ");
+            for (int j = m.getEstrelas(); j < 5; j++) estrelasHtml.append("&#9734; ");
             estrelasHtml.append("</font></html>");
             
             JLabel lblEstrelas = new JLabel(estrelasHtml.toString());
@@ -213,6 +219,7 @@ public class TelaInicial extends JFrame {
             //Montagem do card
             panelInfo.add(lblTitulo);
             panelInfo.add(lblArtista);
+            panelInfo.add(lblGenero);
             panelInfo.add(lblEstrelas);
             panelTop.add(panelInfo, BorderLayout.CENTER);
 

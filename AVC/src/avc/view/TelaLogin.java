@@ -69,11 +69,13 @@ public class TelaLogin extends JFrame {
     private void abrirCadastro() {
         TelaCadastro tela = new TelaCadastro();
         tela.setVisible(true);
+        this.dispose();
     }
 
     private void abrirTelaInicial() {
         TelaInicial tela = new TelaInicial();
         tela.setVisible(true);
+        this.dispose();
     }
 
     public TelaLogin() {
